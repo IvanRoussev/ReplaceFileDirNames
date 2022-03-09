@@ -1,0 +1,145 @@
+#!/bin/bash
+#: Title       : script2_replaces
+#: Date        : Feb 22 2022
+#: Author      : Ivan Roussev
+#: Version     : 1.0
+#: Description : replace spaces in a file name with a dash or underscore
+#: Options     : Read HelpFunc
+
+
+helpFunc () {
+echo "Pass -h if you need help"
+echo "Pass -c if you want to change fileNames with Dash"
+echo "Pass -u if you want to change FileName with Underscores"
+}
+
+
+directoriesUnderscore () {
+dpkg -s rename &> /dev/null
+
+if [ $? -eq 0 ]; then
+    echo "Package rename is installed! no need to do anything"
+    find . -name "* *" -type d | rename 's/ /_/g'
+    echo "Changed all directory names that have spaces in current directoy with underscore [ _ ]"
+else
+    echo "Package rename is NOT installed!"
+    sudo apt install rename
+fi
+}
+
+directoriesDash () {
+dpkg -s rename &> /dev/null
+
+if [ $? -eq 0 ]; then
+    echo "Package rename is installed! no need to do anything"
+    find . -name "* *" -type d | rename 's/ /-/g'
+    echo "Changed all directory names that have spaces in current directoy with dash [ - ]"
+else
+    echo "Package rename is NOT installed!"
+    sudo apt install rename
+fi
+}
+
+
+filesUnderscore () {
+dpkg -s rename &> /dev/null
+
+if [ $? -eq 0 ]; then
+    echo "Package rename is already installed! no need to do anything"
+    find . -name "* *" -type f | rename 's/ /_/g'
+    echo "changed all file names that have spaces to underscore [ _ ]"
+else
+    echo "Package rename is NOT installed!"
+    sudo apt install rename
+fi
+}
+
+
+
+
+filesDash () {
+dpkg -s rename &> /dev/null
+
+if [ $? -eq 0 ]; then
+    echo "Package rename is already installed! no need to do anything"
+    find . -name "* *" -type f | rename 's/ /-/g'
+    echo "changed all file names that have spaces to dash [ - ]"
+else
+    echo "Package rename is NOT installed!"
+    sudo apt install rename
+fi
+}
+
+
+while getopts ":cuh" opt; do
+  case "${opt}" in
+    h | Help ) helpFunc; exit 0
+;;
+    c | dash)
+      filesDash
+      directoriesDash
+  ;;  
+    u | underscore)
+      filesUnderscore
+      directoriesUnderscore
+;;    
+:)
+      echo "requires either -h for help \n -f for Files \n -d Directories"
+      exit 1
+      ;;
+    "?")
+      exit 1
+      ;;
+  esac
+done
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+# User two functions one to check if user has rename package downlaoded. Other Function to check directory if any files have spaces in their name and change it to a under score or a dash.
+
+
+# If and else statement : 
+  #     If User has [package rename Downloaded] do this command: **  find . -name "* *" -type f | rename 's/ /_/g' **
+  #     else Download package **sudo apt install rename** and do same command as above ** find . -name "* *" -type f |rename 'x/ /_g'
+
+#First gotta download package rename  command:   sudo apt install rename
+
+
+
+# I will create two functions one to change spaces in file name to dashes and the other function to change spaces in file name to underscores
+
+# My third function will be like the main
+
+
+#FUNC 1 Check if package rename is download if not download, this can be done with a simple if and else statement and command, if not found do: sudo apt install rename
+
+#FUNC 2 (UNDERSCORE) Run command that will check all files in current directory if their file names have space. If file name has a space it will rename it with an underscore COMMAND: (  find . -name "* *" -type f | rename 's/ /_g'  )
+
+
+#FUNC 3 (DASH) Run command that will check all files in current directory if their file names have space. If file name has a space it will rename it with dashes.  COMMAND (  find . -name "* *" -type f | rename 's/ /-g'  )
+
+
+#SOME planning / practice
+
+#file="$1"
+#DIR="$2"
+
+
+#for file in *; do 
+
+#find . -name "* *" -type f | rename 's/ /_/g'
+
+
